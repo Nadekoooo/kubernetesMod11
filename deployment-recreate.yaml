@@ -2,22 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: spring-petclinic-rest
+  namespace: default
   labels:
     app: spring-petclinic-rest
 spec:
-  replicas: 1
-  strategy:
-    type: Recreate        # <-- switch from RollingUpdate to Recreate
+  replicas: 4
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: spring-petclinic-rest
+  strategy:
+    type: Recreate         
   template:
     metadata:
       labels:
         app: spring-petclinic-rest
     spec:
       containers:
-        - name: spring-petclinic-rest
-          image: docker.io/springcommunity/spring-petclinic-rest:3.0.2
-          ports:
-            - containerPort: 9966
+      - name: spring-petclinic-rest
+        image: docker.io/springcommunity/spring-petclinic-rest:3.2.1
+        imagePullPolicy: IfNotPresent
